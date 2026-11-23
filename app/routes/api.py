@@ -40,9 +40,10 @@ def upload_photos():
     if not files or all(f.filename == "" for f in files):
         return jsonify({"error": "At least one photo must be selected."}), 400
 
-    if len(files) > Config.MAX_FILES_PER_UPLOAD:
+    max_files = current_app.config.get("MAX_FILES_PER_UPLOAD", Config.MAX_FILES_PER_UPLOAD)
+    if len(files) > max_files:
         return jsonify({
-            "error": f"Too many files selected. Maximum is {Config.MAX_FILES_PER_UPLOAD} photos per upload."
+            "error": f"Too many files selected. Maximum is {max_files} photos per upload."
         }), 400
 
     try:
@@ -93,7 +94,7 @@ def upload_photos():
                 visit_count=visitor.visit_count,
                 new_photos=saved_photos,
                 past_photos=past_photos_dicts,
-                duration=Config.SLIDESHOW_DISPLAY_DURATION
+                duration=current_app.config.get("SLIDESHOW_DISPLAY_DURATION", Config.SLIDESHOW_DISPLAY_DURATION)
             )
 
         message = (
@@ -120,8 +121,9 @@ def upload_photos():
     except ImageValidationError as e:
         return jsonify({"error": str(e)}), 400
     except RequestEntityTooLarge:
+        max_mb = current_app.config.get("MAX_UPLOAD_SIZE_MB", Config.MAX_UPLOAD_SIZE_MB)
         return jsonify({
-            "error": f"Upload rejected: total payload exceeds {Config.MAX_UPLOAD_SIZE_MB}MB limit."
+            "error": f"Upload rejected: total payload exceeds {max_mb}MB limit."
         }), 413
     except Exception as e:
         current_app.logger.error(f"Upload error: {str(e)}", exc_info=True)
