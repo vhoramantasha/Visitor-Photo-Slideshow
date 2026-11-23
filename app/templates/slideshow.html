@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart TV Display &bull; Visitor Photo Slideshow</title>
+    <link rel="stylesheet" href="/static/css/slideshow.css">
+</head>
+<body class="slideshow-body">
+    <!-- Active Slide Stage -->
+    <div id="slideshowStage" class="slideshow-stage">
+        <!-- Two layers for seamless cross-fading -->
+        <div id="slideLayerA" class="slide-layer active"></div>
+        <div id="slideLayerB" class="slide-layer"></div>
+        
+        <div class="vignette-overlay"></div>
+    </div>
+
+    <!-- Live Welcome & Visitor Attribution Banner -->
+    <header id="welcomeBanner" class="welcome-banner">
+        <div class="banner-badge" id="bannerBadge">LIVE UPLOAD</div>
+        <div class="banner-content">
+            <h1 class="banner-title" id="bannerTitle">Welcome to Our Space</h1>
+            <p class="banner-subtitle" id="bannerSubtitle">Waiting for visitor uploads...</p>
+        </div>
+        <div class="banner-timer">
+            <svg class="timer-circle" viewBox="0 0 36 36">
+                <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                <path id="timerProgress" class="circle-progress" stroke-dasharray="100, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+            </svg>
+            <span id="timerSeconds" class="timer-text">8s</span>
+        </div>
+    </header>
+
+    <!-- Empty State / Standby Screen -->
+    <div id="standbyScreen" class="standby-screen">
+        <div class="standby-content">
+            <div class="standby-icon">🖼️</div>
+            <h2>Smart TV Visitor Display Active</h2>
+            <p>Scan the QR code below or visit the kiosk to share your photos on this screen!</p>
+            <div class="standby-url">{{ upload_url }}</div>
+        </div>
+    </div>
+
+    <!-- On-Screen Scan & Upload QR Code Overlay -->
+    <aside id="qrOverlay" class="qr-overlay">
+        <div class="qr-box">
+            <div id="qrCodeContainer" class="qr-code"></div>
+            <div class="qr-label">
+                <strong>Upload Photos</strong>
+                <span>Scan with your phone</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- HUD Controls (auto-hide on idle) -->
+    <footer class="slideshow-hud" id="slideshowHud">
+        <div class="hud-left">
+            <span class="status-dot connected" id="statusDot"></span>
+            <span class="status-label" id="statusLabel">Live Stream Connected</span>
+            <span class="queue-badge" id="queueBadge" style="display: none;">0 in priority queue</span>
+        </div>
+        <div class="hud-right">
+            <button id="pauseBtn" class="hud-btn" title="Pause / Resume (Space)">⏸ Pause</button>
+            <button id="toggleQrBtn" class="hud-btn" title="Toggle QR Code (Q)">📱 Hide QR</button>
+            <button id="fullscreenBtn" class="hud-btn" title="Fullscreen (F)">⛶ Fullscreen</button>
+        </div>
+    </footer>
+
+    <!-- Pass configuration to client JS -->
+    <script>
+        window.SLIDESHOW_CONFIG = {
+            duration: {{ duration }},
+            uploadUrl: "{{ upload_url }}",
+            streamUrl: "/api/stream",
+            fetchUrl: "/api/slideshow/all"
+        };
+    </script>
+    <script src="/static/js/slideshow.js"></script>
+</body>
+</html>

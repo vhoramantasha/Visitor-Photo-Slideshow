@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Visitor Gallery & Privacy Management{% endblock %}
+
+{% block content %}
+<div class="gallery-container">
+    <div class="gallery-header">
+        <h1>Visitor Photo Archive & Privacy Portal</h1>
+        <p>Explore photos shared by our community, or enter your personal PIN to withdraw your photos from public display.</p>
+    </div>
+
+    <!-- Privacy Management Box -->
+    <div class="card privacy-manage-card">
+        <h3>🛡️ Need to remove your photo?</h3>
+        <p>If you've previously uploaded a photo and wish to delete it from the TV slideshow and archive, enter your 6-character PIN provided at check-in:</p>
+        <form id="deleteForm" class="delete-form">
+            <div class="inline-inputs">
+                <input type="number" id="deletePhotoId" placeholder="Photo ID" required min="1">
+                <input type="text" id="deletePin" placeholder="6-char PIN (e.g. 4F2A9C)" required maxlength="6" style="text-transform: uppercase;">
+                <button type="submit" class="btn btn-danger">Delete Photo</button>
+            </div>
+            <div id="deleteFeedback" class="delete-feedback" style="display: none;"></div>
+        </form>
+    </div>
+
+    <!-- Photo Grid -->
+    <div class="gallery-grid" id="galleryGrid">
+        {% if photos %}
+            {% for photo in photos %}
+            <div class="gallery-card" id="photo-card-{{ photo.id }}">
+                <div class="gallery-thumb-wrapper">
+                    <img src="{{ photo.url }}" alt="{{ photo.original_filename }}" loading="lazy" class="gallery-thumb">
+                    <span class="photo-id-tag">ID: #{{ photo.id }}</span>
+                </div>
+                <div class="gallery-card-info">
+                    <div class="visitor-meta">
+                        <span class="visitor-name">{{ photo.visitor_name }}</span>
+                        {% if photo.visit_number > 1 %}
+                        <span class="returning-pill">Visit #{{ photo.visit_number }}</span>
+                        {% endif %}
+                    </div>
+                    <span class="photo-date">{{ photo.uploaded_at[:16] }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <div class="empty-gallery">
+                <p>No photos in the gallery yet. <a href="/">Be the first visitor to upload!</a></p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/gallery.js"></script>
+{% endblock %}

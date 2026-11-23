@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Visitor Photo Slideshow{% endblock %}</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <a href="/" class="logo">
+                <span class="logo-icon">📸</span>
+                <span class="logo-text">Visitor<strong>Show</strong></span>
+            </a>
+            <nav class="nav-links">
+                <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">Check In & Upload</a>
+                <a href="/display" class="nav-item {% if request.path == '/display' %}active{% endif %}" target="_blank">TV Display ↗</a>
+                <a href="/gallery" class="nav-item {% if request.path == '/gallery' %}active{% endif %}">Archive & Privacy</a>
+            </nav>
+        </div>
+    </header>
+
+    <main class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="app-footer">
+        <p>Visitor Photo Slideshow &bull; Secure, privacy-conscious public display platform</p>
+    </footer>
+
+    {% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Visitor Check-in & Photo Upload{% endblock %}
+
+{% block content %}
+<div class="upload-container">
+    <div class="card glass-card">
+        <div class="card-header">
+            <h1 class="card-title">Welcome to Our Space! 👋</h1>
+            <p class="card-subtitle">Check in and upload your photos to share them on our venue TV display.</p>
+        </div>
+
+        <form id="uploadForm" class="upload-form" novalidate>
+            <!-- Step 1: Visitor Identification -->
+            <div class="form-section">
+                <label class="section-label">1. Visitor Information</label>
+                
+                <div class="input-group">
+                    <label for="name">Your Full Name *</label>
+                    <input type="text" id="name" name="name" required placeholder="e.g. Alex Rivera" maxlength="100">
+                    <span class="input-hint">Displayed on screen alongside your photos.</span>
+                </div>
+
+                <div class="input-group">
+                    <label for="secondary_identifier">Email or Phone Number *</label>
+                    <input type="text" id="secondary_identifier" name="secondary_identifier" required placeholder="e.g. alex@example.com or +1234567890">
+                    <span class="input-hint">Used securely to recognize you if you visit us again.</span>
+                </div>
+            </div>
+
+            <!-- Step 2: Photo Selection -->
+            <div class="form-section">
+                <label class="section-label">2. Select Your Photos</label>
+                
+                <div class="drop-zone" id="dropZone">
+                    <div class="drop-zone-prompt">
+                        <span class="upload-icon">📷</span>
+                        <p><strong>Click to browse</strong> or drag and drop your photos</p>
+                        <p class="drop-specs">Up to {{ max_files }} photos &bull; Max {{ max_size_mb }}MB per photo (JPEG, PNG, WebP)</p>
+                    </div>
+                    <input type="file" id="photoInput" name="photos" accept="image/jpeg,image/png,image/webp" multiple class="file-input">
+                </div>
+
+                <!-- Preview Grid -->
+                <div id="previewGrid" class="preview-grid" style="display: none;"></div>
+            </div>
+
+            <!-- Step 3: Privacy & Consent -->
+            <div class="form-section privacy-section">
+                <label class="section-label">3. Privacy & Display Consent</label>
+                <div class="consent-box">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="consent" name="consent" checked value="true">
+                        <span class="checkmark"></span>
+                        <span class="consent-text">
+                            <strong>Display on Public Smart TV Slideshow</strong>
+                            <span class="consent-sub">
+                                I consent to having my uploaded photos and name shown on the venue's public screens. You will receive a personal PIN to remove your photos at any time.
+                            </span>
+                        </span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Submit Button & Feedback -->
+            <div class="form-actions">
+                <button type="submit" id="submitBtn" class="btn btn-primary">
+                    <span class="btn-text">Upload & Play on TV Display</span>
+                    <span class="btn-spinner" style="display: none;"></span>
+                </button>
+            </div>
+
+            <div id="statusMessage" class="status-banner" style="display: none;"></div>
+        </form>
+
+        <!-- Success Modal / Card -->
+        <div id="successCard" class="success-card" style="display: none;">
+            <div class="success-icon">🎉</div>
+            <h2 id="successHeading">Upload Complete!</h2>
+            <p id="successDetails"></p>
+            
+            <div class="pin-display-box">
+                <span class="pin-label">Your Personal Privacy PIN:</span>
+                <span class="pin-value" id="displayPin">------</span>
+                <p class="pin-note">Keep this 6-character PIN safe. You can use it in the Archive page to delete or withdraw your photos anytime.</p>
+            </div>
+
+            <div class="success-actions">
+                <button type="button" class="btn btn-secondary" id="resetBtn">Upload More Photos</button>
+                <a href="/display" target="_blank" class="btn btn-outline">Watch Live on TV Display ↗</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="/static/js/upload.js"></script>
+{% endblock %}
